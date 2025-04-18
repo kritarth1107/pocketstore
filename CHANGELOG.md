@@ -1,5 +1,11 @@
 # @m4dm4x/pocketstore
 
+## 1.0.3
+
+### Patch Changes
+
+- ec97ca1: updated README.md for correct import
+
 ## 1.0.2
 
 ### Patch Changes
