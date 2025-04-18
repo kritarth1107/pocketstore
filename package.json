@@ -1,0 +1,53 @@
+{
+  "name": "@m4dm4x/pocketstore",
+  "version": "1.0.0",
+  "description": "A lightweight, type-safe storage library for browser and Node.js environments with support for namespacing, TTL, and encryption",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup src/index.ts --watch --dts",
+    "build": "tsup src/index.ts --dts",
+    "test": "vitest --environment jsdom",
+    "test:coverage": "vitest --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "storage",
+    "localStorage",
+    "sessionStorage",
+    "browser",
+    "ssr",
+    "typescript",
+    "encryption",
+    "ttl",
+    "namespace"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "eslint": "^9.24.0",
+    "prettier": "^3.5.3",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1",
+    "jsdom": "^24.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/pocketstore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/pocketstore/issues"
+  },
+  "homepage": "https://github.com/yourusername/pocketstore#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

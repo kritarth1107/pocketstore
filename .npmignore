@@ -1,0 +1,15 @@
+# Don't publish source files, configs, tests
+src/
+test/
+*.ts
+*.tsx
+tsconfig.json
+tsconfig.*.json
+vitest.config.ts
+jest.config.js
+.prettierrc
+.eslintrc.*
+.nyc_output/
+coverage/
+.gitignore
+.npmignore

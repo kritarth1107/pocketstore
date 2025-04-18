@@ -1,0 +1,18 @@
+# Node modules and build artifacts
+node_modules/
+dist/
+.cache/
+*.log
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# Environment variables
+.env
+.env.local
+
+# IDE/editor configs
+.vscode/
+.idea/
+.DS_Store
