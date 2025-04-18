@@ -164,7 +164,7 @@ The library automatically falls back to in-memory storage when running in Node.j
 
 ## 📝 License
 
-ISC
+[ISC](LICENSE)
 
 ## 🤝 Contributing
 
