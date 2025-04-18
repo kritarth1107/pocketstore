@@ -33,4 +33,5 @@ jobs:
         with:
           publish: npm run build && npm publish --access public
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
