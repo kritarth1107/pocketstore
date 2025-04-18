@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "tsup src/index.ts --watch --dts",
     "build": "tsup src/index.ts --dts",
+    "clean": "rm -rf dist",
     "test": "vitest --environment jsdom",
     "test:coverage": "vitest --coverage",
     "prepublishOnly": "npm run build"
