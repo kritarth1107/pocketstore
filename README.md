@@ -16,19 +16,19 @@ A lightweight, type-safe storage library for browser and Node.js environments wi
 
 ```bash
 # Using npm
-npm install pocketstore
+npm install @m4dm4x/pocketstore
 
 # Using yarn
-yarn add pocketstore
+yarn add @m4dm4x/pocketstore
 
 # Using pnpm
-pnpm add pocketstore
+pnpm add @m4dm4x/pocketstore
 ```
 
 ## 🚀 Quick Start
 
 ```typescript
-import { createStore } from 'pocketstore';
+import { createStore } from '@m4dm4x/pocketstore';
 
 // Create a store with a namespace
 const store = createStore('myapp');
@@ -146,7 +146,7 @@ Object with methods:
 The library includes TypeScript definitions out of the box:
 
 ```typescript
-import { createStore } from 'pocketstore';
+import { createStore } from '@m4dm4x/pocketstore';
 
 interface UserData {
   name: string;
