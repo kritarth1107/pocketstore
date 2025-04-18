@@ -41,12 +41,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/pocketstore.git"
+    "url": "git+https://github.com/kritarth1107/pocketstore.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/pocketstore/issues"
+    "url": "https://github.com/yourusernkritarth1107ame/pocketstore/issues"
   },
-  "homepage": "https://github.com/yourusername/pocketstore#readme",
+  "homepage": "https://github.com/kritarth1107/pocketstore#readme",
   "engines": {
     "node": ">=14.0.0"
   }
