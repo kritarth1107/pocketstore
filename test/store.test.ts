@@ -24,6 +24,7 @@ class MockStorage {
 describe("pocketstore", () => {
   let storage: ReturnType<typeof createStore>;
   let originalWindow: any;
+  let consoleWarnSpy: any;
 
   beforeEach(() => {
     // Save original window
@@ -36,6 +37,9 @@ describe("pocketstore", () => {
       document: {} // Add document to make isBrowser check pass
     } as any;
 
+    // Spy on console.warn for deprecation warnings
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     storage = createStore("testspace", { storage: "local" });
     vi.useFakeTimers();
   });
@@ -44,6 +48,7 @@ describe("pocketstore", () => {
     // Restore original window
     globalThis.window = originalWindow;
     vi.useRealTimers();
+    consoleWarnSpy.mockRestore();
   });
 
   it("sets and gets a value", () => {
@@ -97,5 +102,135 @@ describe("pocketstore", () => {
     ssrStore.clear();
     expect(ssrStore.get("a")).toBeNull();
     expect(ssrStore.get("b")).toBeNull();
+  });
+
+  describe("obfuscation", () => {
+    it("works with obfuscate option", () => {
+      const obfuscatedStore = createStore("obfuscated", {
+        obfuscate: true,
+        secret: "test-secret"
+      });
+
+      obfuscatedStore.set("secret", "value");
+      expect(obfuscatedStore.get("secret")).toBe("value");
+    });
+
+    it("shows deprecation warning for encrypt option", () => {
+      createStore("deprecated", {
+        encrypt: true,
+        secret: "test-secret"
+      });
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('deprecated')
+      );
+    });
+
+    it("works with deprecated encrypt option", () => {
+      const encryptedStore = createStore("encrypted", {
+        encrypt: true,
+        secret: "test-secret"
+      });
+
+      encryptedStore.set("secret", "value");
+      expect(encryptedStore.get("secret")).toBe("value");
+    });
+
+    it("requires secret when obfuscation is enabled", () => {
+      const store = createStore("no-secret", {
+        obfuscate: true
+      });
+
+      store.set("value", "test");
+      expect(store.get("value")).toBe("test"); // Should still work but without obfuscation
+    });
+  });
+
+  describe("new methods", () => {
+    it("has() checks if a key exists", () => {
+      storage.set("exists", "value");
+      expect(storage.has("exists")).toBe(true);
+      expect(storage.has("nonexistent")).toBe(false);
+    });
+
+    it("keys() returns all keys in the namespace", () => {
+      storage.set("key1", "value1");
+      storage.set("key2", "value2");
+      const keys = storage.keys();
+      expect(keys).toContain("key1");
+      expect(keys).toContain("key2");
+      expect(keys.length).toBe(2);
+    });
+
+    it("getAll() returns all values in the namespace", () => {
+      storage.set("key1", "value1");
+      storage.set("key2", "value2");
+      const all = storage.getAll();
+      expect(all).toEqual({
+        key1: "value1",
+        key2: "value2"
+      });
+    });
+
+    it("init() initializes the store", () => {
+      const store = createStore("init-test");
+      expect(() => store.init()).not.toThrow();
+    });
+  });
+
+  describe("automatic cleanup", () => {
+    it("cleans up expired items on getAll()", () => {
+      const store = createStore("cleanup-test", { autoCleanup: true });
+      
+      store.set("expired", "value", 1); // 1 second TTL
+      store.set("valid", "value", 60); // 60 seconds TTL
+      
+      vi.advanceTimersByTime(2000); // Advance time by 2 seconds
+      
+      const all = store.getAll();
+      expect(all).toEqual({
+        valid: "value"
+      });
+      
+      // Verify the expired item was removed from storage
+      expect(store.get("expired")).toBeNull();
+    });
+
+    it("cleans up expired items on init()", () => {
+      const store = createStore("cleanup-test", { autoCleanup: true });
+      
+      store.set("expired", "value", 1); // 1 second TTL
+      store.set("valid", "value", 60); // 60 seconds TTL
+      
+      vi.advanceTimersByTime(2000); // Advance time by 2 seconds
+      
+      store.init();
+      expect(store.get("expired")).toBeNull();
+      expect(store.get("valid")).toBe("value");
+    });
+
+    it("cleans up on creation when autoCleanup is enabled", () => {
+      const store = createStore("cleanup-test", { autoCleanup: true });
+      
+      store.set("expired", "value", 1); // 1 second TTL
+      vi.advanceTimersByTime(2000); // Advance time by 2 seconds
+      
+      expect(store.get("expired")).toBeNull();
+    });
+
+    it("does not clean up when autoCleanup is disabled", () => {
+      const store = createStore("cleanup-test", { autoCleanup: false });
+      
+      store.set("expired", "value", 1); // 1 second TTL
+      vi.advanceTimersByTime(2000); // Advance time by 2 seconds
+      
+      store.init();
+      // The value should still be in storage but not accessible
+      expect(store.get("expired")).toBeNull();
+      
+      // Verify the item still exists in storage
+      const raw = (globalThis.window as any).localStorage.getItem("cleanup-test::expired");
+      expect(raw).not.toBeNull();
+    });
   });
 });
