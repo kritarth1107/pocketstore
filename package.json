@@ -1,6 +1,6 @@
 {
   "name": "@m4dm4x/pocketstore",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A lightweight, type-safe storage library for browser and Node.js environments with support for namespacing, TTL, and encryption.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
